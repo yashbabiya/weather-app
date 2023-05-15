@@ -6,11 +6,24 @@ import logo from "./imgs/logo.png";
 function App() {
   const [city, setCity] = useState();
   const [data, setData] = useState();
-  const [history, setHistory] = useState(JSON.parse(localStorage.getItem("history") || []));
+  const [history, setHistory] = useState([]);
   const [unit, setUnit] = useState("C");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  
+  const initiateSavingHistory =()=>{
+    const localHistory = localStorage.getItem("history");
+    if(localHistory && JSON.parse(localHistory).length){
+      setHistory(JSON.parse(localHistory))
+    }
+    else{
+      saveHistory();
+    }
+  }
 
+  useEffect(()=>{
+    initiateSavingHistory()
+  },[])
   const saveHistory =()=>{
     localStorage.setItem("history",JSON.stringify(history));
   }
