@@ -6,11 +6,14 @@ import logo from "./imgs/logo.png";
 function App() {
   const [city, setCity] = useState();
   const [data, setData] = useState();
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(JSON.parse(localStorage.getItem("history") || []));
   const [unit, setUnit] = useState("C");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  const saveHistory =()=>{
+    localStorage.setItem("history",JSON.stringify(history));
+  }
   const pushHistory = (inputCity) => {
     const cities = history?.map((c) => c.toLowerCase());
     if (cities?.includes(inputCity.toLowerCase())) return;
@@ -19,6 +22,9 @@ function App() {
       setHistory((prev) => [inputCity, ...prev.slice(0, 5)]);
     }
   };
+  useEffect(()=>{
+    saveHistory();
+  },[history])
   const getDeatils = async (sCity) => {
     const cityname = sCity || city;
     setIsLoading(true);
